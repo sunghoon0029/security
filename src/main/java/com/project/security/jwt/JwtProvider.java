@@ -63,7 +63,7 @@ public class JwtProvider {
 
     // Token에서 사용자 정보 추출
     public String getAccount(String token) {
-        return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJwt(token).getBody().getSubject();
+        return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().getSubject();
     }
 
     // Authorization Header를 통해 인증
