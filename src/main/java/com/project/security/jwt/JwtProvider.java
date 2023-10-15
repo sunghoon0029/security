@@ -26,7 +26,7 @@ public class JwtProvider {
 
     // application.yml jwt.secret.key 설정값
     @Value("${jwt.secret.key}")
-    private String salt = "";
+    private String salt;
 
     private Key secretKey;
 
