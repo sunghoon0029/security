@@ -7,7 +7,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -43,8 +43,8 @@ public class JwtProvider {
     }
 
     // Token 생성
-    public String createToken(String account, List<Authority> roles) {
-        Claims claims = Jwts.claims().setSubject(account); // Claim 설정, Claim: JWT 내에 포함되는 점보
+    public String createToken(String email, List<Authority> roles) {
+        Claims claims = Jwts.claims().setSubject(email); // Claim 설정, Claim: JWT 내에 포함되는 점보
         claims.put("roles", roles); // roles Claim에 권한(roles) 정보 추가
         Date now = new Date(); // 현재 시간 정보
         return Jwts.builder()
@@ -75,7 +75,7 @@ public class JwtProvider {
     public boolean validateToken(String token) {
         try {
             // Bearer 검증
-            if (!token.substring(0, "BEARER".length()).equalsIgnoreCase("BEARER ")) {
+            if (!token.substring(0, "BEARER ".length()).equalsIgnoreCase("BEARER ")) {
                 return false;
             } else {
                 token = token.split(" ")[1].trim();
