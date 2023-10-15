@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
     // 주어진 사용자 이름(이메일)을 기반으로 사용자 정보를 검색하고 Spring Security에게 반환
     @Override
