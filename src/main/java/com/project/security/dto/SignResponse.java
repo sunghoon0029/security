@@ -24,7 +24,7 @@ public class SignResponse {
 
     private List<Authority> roles = new ArrayList<>();
 
-    private String token;
+    private TokenDto token;
 
     public SignResponse(Member member) {
         this.id = member.getId();

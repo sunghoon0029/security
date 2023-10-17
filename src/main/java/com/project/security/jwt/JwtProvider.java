@@ -1,10 +1,7 @@
 package com.project.security.jwt;
 
 import com.project.security.entity.Authority;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +28,7 @@ public class JwtProvider {
     private Key secretKey;
 
     // Token 만료시간 설정
-    private final long exp = 30 * 60 * 1000L;
+    private final long exp = 60 * 1000L;
 
     private final CustomUserDetailsService userDetailsService;
 
@@ -57,12 +54,21 @@ public class JwtProvider {
 
     // Token에서 인증 정보 조회
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getAccount(token));
+        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getEmail(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
-    // Token에서 사용자 정보 추출
-    public String getAccount(String token) {
+    // Token에서 사용자 이메일 주소 추출
+    public String getEmail(String token) {
+        // 만료된 Token에 대해 parseClaimsJws를 수행 시 io.jsonwebtoken.ExpiredJwtException 발생
+        try {
+            Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().getSubject();
+        } catch (ExpiredJwtException e) {
+            e.printStackTrace();
+            return e.getClaims().getSubject();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().getSubject();
     }
 

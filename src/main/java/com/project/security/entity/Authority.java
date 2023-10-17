@@ -25,7 +25,7 @@ public class Authority {
 
     @ManyToOne
     @JoinColumn(name = "member")
-    @JsonIgnore
+    @JsonIgnore // JSON 변환과정에서 객체에 포함되지 않음
     private Member member;
 
     public void setMember(Member member) {

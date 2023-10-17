@@ -2,7 +2,7 @@ package com.project.security.controller;
 
 import com.project.security.dto.SignRequest;
 import com.project.security.dto.SignResponse;
-import com.project.security.repository.MemberRepository;
+import com.project.security.dto.TokenDto;
 import com.project.security.service.SignService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -34,5 +34,10 @@ public class SignController {
     @GetMapping("/admin/get")
     public ResponseEntity<SignResponse> getUserForAdmin(@RequestParam String email) throws Exception {
         return new ResponseEntity<>(memberService.findByEmail(email), HttpStatus.OK);
+    }
+
+    @GetMapping("/refresh")
+    public ResponseEntity<TokenDto> refresh(@RequestBody TokenDto token) throws Exception {
+        return new ResponseEntity<>(memberService.refreshAccessToken(token), HttpStatus.OK);
     }
 }
